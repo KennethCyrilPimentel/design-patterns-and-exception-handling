@@ -250,13 +250,7 @@ OrderManager* OrderManager::instance = nullptr;
 // Utility functions
 string generateOrderId() {
     static int counter = 1;
-    time_t now = time(0);
-    tm* ltm = localtime(&now);
-    
-    char buffer[20];
-    strftime(buffer, sizeof(buffer), "%Y%m%d", ltm);
-    
-    return string(buffer) + "-" + to_string(counter++);
+    return "ORD-" + to_string(counter++);
 }
 
 bool validateYesNo(const string& input) {
@@ -464,7 +458,12 @@ private:
     void logOrder(const string& orderId, const string& paymentMethod) {
         ofstream logFile("orders.log", ios::app);
         if (logFile.is_open()) {
-            logFile << "[LOG] -> Order ID: " << orderId 
+            time_t now = time(0);
+            tm* ltm = localtime(&now);
+            char buffer[20];
+            strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ltm);
+            
+            logFile << "[" << buffer << "] Order ID: " << orderId 
                    << " has been successfully checked out and paid using " 
                    << paymentMethod << ".\n";
             logFile.close();
