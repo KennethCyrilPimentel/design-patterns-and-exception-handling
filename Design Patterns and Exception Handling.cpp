@@ -5,6 +5,7 @@
 #include <cctype>
 #include <iomanip>
 
+using namespace std;
 // Constants
 const int MAX_PRODUCTS = 100;
 const int MAX_CART_ITEMS = 100;
@@ -13,27 +14,27 @@ const int MAX_ORDERS = 100;
 // Product class
 class Product {
 private:
-    std::string id;
-    std::string name;
+    string id;
+    string name;
     double price;
 
 public:
     Product() : id(""), name(""), price(0.0) {}
-    Product(std::string id, std::string name, double price) : id(id), name(name), price(price) {}
+    Product(string id, string name, double price) : id(id), name(name), price(price) {}
 
     // Getters
-    std::string getId() const { return id; }
-    std::string getName() const { return name; }
+    string getId() const { return id; }
+    string getName() const { return name; }
     double getPrice() const { return price; }
 
     // Setters with validation
-    void setId(std::string newId) {
+    void setId(string newId) {
         if (!newId.empty()) {
             id = newId;
         }
     }
 
-    void setName(std::string newName) {
+    void setName(string newName) {
         if (!newName.empty()) {
             name = newName;
         }
@@ -46,10 +47,10 @@ public:
     }
 
     void display() const {
-        std::cout << std::left << std::setw(10) << id 
-                  << std::setw(15) << name 
-                  << "$" << std::setw(8) <<  price 
-                  << std::left << std::endl;
+        cout << left << setw(10) << id 
+                  << setw(15) << name 
+                  << "$" << setw(8) <<  price 
+                  << left << endl;
     }
 };
 
@@ -77,61 +78,61 @@ public:
     }
 
     void display() const {
-        std::cout << std::left << std::setw(10) << product.getId() 
-                  << std::setw(15) << product.getName() 
-                  << "$" << std::setw(8) <<  product.getPrice()
-                  << std::setw(10) << std::right << quantity << std::endl;
+        cout << left << setw(10) << product.getId() 
+                  << setw(15) << product.getName() 
+                  << "$" << setw(8) <<  product.getPrice()
+                  << setw(10) << right << quantity << endl;
     }
 };
 
 // Order class
 class Order {
 private:
-    std::string orderId;
+    string orderId;
     CartItem items[MAX_CART_ITEMS];
     int itemCount;
     double totalAmount;
-    std::string paymentMethod;
+    string paymentMethod;
 
 public:
     Order() : orderId(""), itemCount(0), totalAmount(0.0), paymentMethod("") {}
 
-    Order(std::string id, CartItem cart[], int count, double total, std::string payment) 
+    Order(string id, CartItem cart[], int count, double total, string payment) 
         : orderId(id), itemCount(count), totalAmount(total), paymentMethod(payment) {
         for (int i = 0; i < count; i++) {
             items[i] = cart[i];
         }
     }
 
-    std::string getOrderId() const { return orderId; }
+    string getOrderId() const { return orderId; }
     double getTotalAmount() const { return totalAmount; }
-    std::string getPaymentMethod() const { return paymentMethod; }
+    string getPaymentMethod() const { return paymentMethod; }
     int getItemCount() const { return itemCount; }
     CartItem getItem(int index) const { return items[index]; }
 
     void display() const {
-        std::cout << "\n----------------------------------------\n";
-        std::cout << "Order ID: " << orderId << "\n";
-        std::cout << "Total Amount: " << std::fixed << std::setprecision(2) << totalAmount << "\n";
-        std::cout << "Payment Method: " << paymentMethod << "\n";
-        std::cout << "Order Details:\n";
-        std::cout << std::left 
-                  << std::setw(12) << "Product ID"
-                  << std::setw(18) << "Name"
-                  << std::setw(12) << "Price"
+        cout << "\n----------------------------------------\n";
+        cout << "Order ID: " << orderId << "\n";
+        cout << "Total Amount: " << fixed << setprecision(2) << totalAmount << "\n";
+        cout << "Payment Method: " << paymentMethod << "\n";
+        cout << "Order Details:\n";
+        cout << left 
+                  << setw(12) << "Product ID"
+                  << setw(18) << "Name"
+                  << setw(12) << "Price"
                   << "Quantity" << "\n";
         
         for (int i = 0; i < itemCount; i++) {
-            std::ostringstream priceStream;
-            priceStream << "$" << std::fixed << std::setprecision(2) << items[i].getProduct().getPrice();
+            ostringstream priceStream;
+            priceStream << "$" << fixed << setprecision(2) << items[i].getProduct().getPrice();
             
-            std::cout << std::left 
-                      << std::setw(12) << items[i].getProduct().getId()
-                      << std::setw(18) << items[i].getProduct().getName()
-                      << std::setw(12) << priceStream.str()  // Use the formatted price string
-                      << std::setw(10) << items[i].getQuantity() << "\n";
+            cout << left 
+                      << setw(12) << items[i].getProduct().getId()
+                      << setw(18) << items[i].getProduct().getName()
+                      << setw(12) << priceStream.str()  // Use the formatted price string
+                      << setw(10) << items[i].getQuantity() << "\n";
         }
-        std::cout << "----------------------------------------\n";
+        cout << "----------------------------------------\n";
     }
 };
 
@@ -140,17 +141,17 @@ class PaymentStrategy {
 public:
     virtual ~PaymentStrategy() {}
     virtual void pay(double amount) = 0;
-    virtual std::string getMethodName() const = 0;
+    virtual string getMethodName() const = 0;
 };
 
 // Concrete Payment Strategies
 class CashPayment : public PaymentStrategy {
 public:
     void pay(double amount) override {
-        std::cout << "Paid $" << amount << " in cash.\n";
+        cout << "Paid $" << amount << " in cash.\n";
     }
     
-    std::string getMethodName() const override {
+    string getMethodName() const override {
         return "Cash";
     }
 };
@@ -158,10 +159,10 @@ public:
 class CardPayment : public PaymentStrategy {
 public:
     void pay(double amount) override {
-        std::cout << "Paid $" << amount << " using Credit/Debit Card.\n";
+        cout << "Paid $" << amount << " using Credit/Debit Card.\n";
     }
     
-    std::string getMethodName() const override {
+    string getMethodName() const override {
         return "Credit / Debit Card";
     }
 };
@@ -169,10 +170,10 @@ public:
 class GCashPayment : public PaymentStrategy {
 public:
     void pay(double amount) override {
-        std::cout << "Paid $" << amount << " using GCash.\n";
+        cout << "Paid $" << amount << " using GCash.\n";
     }
     
-    std::string getMethodName() const override {
+    string getMethodName() const override {
         return "GCash";
     }
 };
@@ -199,7 +200,7 @@ public:
         }
     }
 
-    std::string getPaymentMethod() const {
+    string getPaymentMethod() const {
         if (strategy) {
             return strategy->getMethodName();
         }
@@ -234,7 +235,7 @@ public:
 
     void displayAllOrders() const {
         if (orderCount == 0) {
-            std::cout << "\nNo orders yet.\n";
+            cout << "\nNo orders yet.\n";
             return;
         }
 
@@ -247,7 +248,7 @@ public:
 OrderManager* OrderManager::instance = nullptr;
 
 // Utility functions
-std::string generateOrderId() {
+string generateOrderId() {
     static int counter = 1;
     time_t now = time(0);
     tm* ltm = localtime(&now);
@@ -255,14 +256,14 @@ std::string generateOrderId() {
     char buffer[20];
     strftime(buffer, sizeof(buffer), "%Y%m%d", ltm);
     
-    return std::string(buffer) + "-" + std::to_string(counter++);
+    return string(buffer) + "-" + to_string(counter++);
 }
 
-bool validateYesNo(const std::string& input) {
+bool validateYesNo(const string& input) {
     return (input == "Y" || input == "y" || input == "N" || input == "n");
 }
 
-bool validateNumeric(const std::string& input) {
+bool validateNumeric(const string& input) {
     for (char c : input) {
         if (!isdigit(c)) {
             return false;
@@ -271,29 +272,29 @@ bool validateNumeric(const std::string& input) {
     return true;
 }
 
-int getValidatedInt(const std::string& prompt) {
-    std::string input;
+int getValidatedInt(const string& prompt) {
+    string input;
     while (true) {
-        std::cout << prompt;
-        std::getline(std::cin, input);
+        cout << prompt;
+        getline(cin, input);
         
         if (validateNumeric(input)) {
-            return std::stoi(input);
+            return stoi(input);
         }
-        std::cout << "Invalid input. Please enter a number.\n";
+        cout << "Invalid input. Please enter a number.\n";
     }
 }
 
-std::string getValidatedYesNo(const std::string& prompt) {
-    std::string input;
+string getValidatedYesNo(const string& prompt) {
+    string input;
     while (true) {
-        std::cout << prompt;
-        std::getline(std::cin, input);
+        cout << prompt;
+        getline(cin, input);
         
         if (validateYesNo(input)) {
             return toupper(input[0]) == 'Y' ? "Y" : "N";
         }
-        std::cout << "Invalid input. Please enter Y or N.\n";
+        cout << "Invalid input. Please enter Y or N.\n";
     }
 }
 
@@ -316,30 +317,30 @@ private:
     }
 
     void displayProducts() const {
-        std::cout << "\nAvailable Products:\n";
-        std::cout << std::left << std::setw(10) << "ID" 
-                  << std::setw(15) << "Name" 
-                  << "Price" << std::endl;
-        std::cout << "--------------------------------\n";
+        cout << "\nAvailable Products:\n";
+        cout << left << setw(10) << "ID" 
+                  << setw(15) << "Name" 
+                  << "Price" << endl;
+        cout << "--------------------------------\n";
         for (int i = 0; i < productCount; i++) {
             products[i].display();
         }
-        std::cout << "--------------------------------\n";
+        cout << "--------------------------------\n";
     }
 
     void addToCart() {
-        std::string input;
+        string input;
         bool addMore = true;
         
         while (addMore && cartItemCount < MAX_CART_ITEMS) {
             displayProducts();
             
-            std::string productId;
+            string productId;
             bool found = false;
             
             while (!found) {
-                std::cout << "Enter the ID of the product you want to add to the shopping cart: ";
-                std::getline(std::cin, productId);
+                cout << "Enter the ID of the product you want to add to the shopping cart: ";
+                getline(cin, productId);
                 
                 for (int i = 0; i < productCount; i++) {
                     if (products[i].getId() == productId) {
@@ -359,33 +360,33 @@ private:
                             shoppingCart[cartItemCount++] = CartItem(products[i], 1);
                         }
                         
-                        std::cout << "Product added successfully!\n";
+                        cout << "Product added successfully!\n";
                         break;
                     }
                 }
                 
                 if (!found) {
-                    std::cout << "Product ID not found. Please try again.\n";
+                    cout << "Product ID not found. Please try again.\n";
                 }
             }
             
-            std::string choice = getValidatedYesNo("Do you want to add another product? (Y/N): ");
+            string choice = getValidatedYesNo("Do you want to add another product? (Y/N): ");
             addMore = (choice == "Y");
         }
     }
 
     void viewCart() {
         if (cartItemCount == 0) {
-            std::cout << "\nYour shopping cart is empty.\n";
+            cout << "\nYour shopping cart is empty.\n";
             return;
         }
         
-        std::cout << "\nYour Shopping Cart:\n";
-        std::cout << std::left << std::setw(10) << "ID" 
-                  << std::setw(15) << "Name" 
-                  << std::setw(10) << "Price" 
-                  << "Quantity" << std::endl;
-        std::cout << "---------------------------------------------\n";
+        cout << "\nYour Shopping Cart:\n";
+        cout << left << setw(10) << "ID" 
+                  << setw(15) << "Name" 
+                  << setw(10) << "Price" 
+                  << "Quantity" << endl;
+        cout << "---------------------------------------------\n";
         
         double total = 0.0;
         for (int i = 0; i < cartItemCount; i++) {
@@ -393,10 +394,10 @@ private:
             total += shoppingCart[i].getTotalPrice();
         }
         
-        std::cout << "---------------------------------------------\n";
-        std::cout << "Total: $" << std::fixed << std::setprecision(2) << total << "\n";
+        cout << "---------------------------------------------\n";
+        cout << "Total: $" << fixed << setprecision(2) << total << "\n";
         
-        std::string choice = getValidatedYesNo("\nDo you want to check out all the products? (Y/N): ");
+        string choice = getValidatedYesNo("\nDo you want to check out all the products? (Y/N): ");
         if (choice == "Y") {
             checkout(total);
         }
@@ -404,35 +405,35 @@ private:
 
     void checkout(double total) {
         if (cartItemCount == 0) {
-            std::cout << "No items to checkout.\n";
+            cout << "No items to checkout.\n";
             return;
         }
         
-        std::cout << "\nProducts for Checkout:\n";
-        std::cout << std::left << std::setw(10) << "ID" 
-                  << std::setw(15) << "Name" 
-                  << std::setw(10) << "Price" 
-                  << "Quantity" << std::endl;
-        std::cout << "--------------------------------\n";
+        cout << "\nProducts for Checkout:\n";
+        cout << left << setw(10) << "ID" 
+                  << setw(15) << "Name" 
+                  << setw(10) << "Price" 
+                  << "Quantity" << endl;
+        cout << "--------------------------------\n";
         
         for (int i = 0; i < cartItemCount; i++) {
             shoppingCart[i].display();
         }
         
-        std::cout << "--------------------------------\n";
-        std::cout << "Total Amount: $" << total << "\n\n";
+        cout << "--------------------------------\n";
+        cout << "Total Amount: $" << total << "\n\n";
         
         // Select payment method
         PaymentContext paymentContext;
         
-        std::cout << "Select Payment Method:\n";
-        std::cout << "1. Cash\n";
-        std::cout << "2. Credit/Debit Card\n";
-        std::cout << "3. GCash\n";
+        cout << "Select Payment Method:\n";
+        cout << "1. Cash\n";
+        cout << "2. Credit/Debit Card\n";
+        cout << "3. GCash\n";
         
         int choice = getValidatedInt("Enter your choice (1-3): ");
         while (choice < 1 || choice > 3) {
-            std::cout << "Invalid choice. Please enter a number between 1 and 3.\n";
+            cout << "Invalid choice. Please enter a number between 1 and 3.\n";
             choice = getValidatedInt("Enter your choice (1-3): ");
         }
         
@@ -445,7 +446,7 @@ private:
         paymentContext.executePayment(total);
         
         // Create order
-        std::string orderId = generateOrderId();
+        string orderId = generateOrderId();
         Order newOrder(orderId, shoppingCart, cartItemCount, total, paymentContext.getPaymentMethod());
         
         // Add to order manager
@@ -457,23 +458,23 @@ private:
         // Clear the cart
         cartItemCount = 0;
         
-        std::cout << "\nYou have successfully checked out the products!\n";
+        cout << "\nYou have successfully checked out the products!\n";
     }
 
-    void logOrder(const std::string& orderId, const std::string& paymentMethod) {
-        std::ofstream logFile("orders.log", std::ios::app);
+    void logOrder(const string& orderId, const string& paymentMethod) {
+        ofstream logFile("orders.log", ios::app);
         if (logFile.is_open()) {
             logFile << "[LOG] -> Order ID: " << orderId 
                    << " has been successfully checked out and paid using " 
                    << paymentMethod << ".\n";
             logFile.close();
         } else {
-            std::cerr << "Unable to open log file.\n";
+            cerr << "Unable to open log file.\n";
         }
     }
 
     void viewOrders() const {
-        std::cout << "\nOrder History:\n";
+        cout << "\nOrder History:\n";
         OrderManager::getInstance()->displayAllOrders();
     }
 
@@ -484,11 +485,11 @@ public:
 
     void run() {
         while (true) {
-            std::cout << "\n=== Online Store Menu ===\n";
-            std::cout << "1. View Products\n";
-            std::cout << "2. View Shopping Cart\n";
-            std::cout << "3. View Orders\n";
-            std::cout << "4. Exit\n";
+            cout << "\n=== Online Store Menu ===\n";
+            cout << "1. View Products\n";
+            cout << "2. View Shopping Cart\n";
+            cout << "3. View Orders\n";
+            cout << "4. Exit\n";
             
             int choice = getValidatedInt("Enter your choice (1-4): ");
             
@@ -503,10 +504,10 @@ public:
                     viewOrders();
                     break;
                 case 4:
-                    std::cout << "Thank you for shopping with us!\n";
+                    cout << "Thank you for shopping with us!\n";
                     return;
                 default:
-                    std::cout << "Invalid choice. Please try again.\n";
+                    cout << "Invalid choice. Please try again.\n";
             }
         }
     }
