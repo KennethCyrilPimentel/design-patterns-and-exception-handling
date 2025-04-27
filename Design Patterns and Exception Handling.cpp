@@ -250,7 +250,7 @@ OrderManager* OrderManager::instance = nullptr;
 // Utility functions
 string generateOrderId() {
     static int counter = 1;
-    return "ORD-" + to_string(counter++);
+    return to_string(counter++);
 }
 
 bool validateYesNo(const string& input) {
